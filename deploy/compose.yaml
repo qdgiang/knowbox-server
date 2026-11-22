@@ -1,0 +1,62 @@
+name: knowbox-explorer
+services:
+  gateway:
+    image: nginx:alpine
+    pull_policy: never
+    entrypoint: ["/usr/sbin/nginx", "-g", "daemon off;"]
+    user: "${KNOWBOX_CONTAINER_USER:-1000:1000}"
+    read_only: true
+    ports:
+      - "${KNOWBOX_GATEWAY_BIND:-127.0.0.1:7878}:7878"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:rw,size=32m,nosuid,nodev,noexec,mode=1777
+    volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: "${KNOWBOX_TRUST_RULES:-./trust.conf}"
+        target: /etc/nginx/knowbox-trust.conf
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: "${KNOWBOX_WEB_ROOT:-../web}"
+        target: /srv/explorer
+        read_only: true
+        bind: {create_host_path: false}
+  explorer:
+    image: registry.fedoraproject.org/fedora:44
+    pull_policy: never
+    depends_on: [gateway]
+    network_mode: service:gateway
+    user: "${KNOWBOX_CONTAINER_USER:-1000:1000}"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:rw,size=64m,nosuid,nodev,noexec,mode=1777
+    environment:
+      HOME: /tmp
+      KNOWBOX_ROOT: /kb
+      TZ: "${KNOWBOX_TIME_ZONE:-Etc/UTC}"
+    volumes:
+      - type: bind
+        source: "${KNOWBOX_DATA:?set KNOWBOX_DATA to the knowledge base directory}"
+        target: /kb
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: "${KNOWBOX_BINARY:?set KNOWBOX_BINARY to the installed CLI binary}"
+        target: /app/knowbox
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: /usr/bin/git
+        target: /usr/bin/git
+        read_only: true
+        bind: {create_host_path: false}
+    entrypoint: ["/bin/sh", "-ec", "umask 077; exec /app/knowbox serve --read-only --port 7879 >/tmp/launch"]

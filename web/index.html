@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Knowbox Explorer</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script defer src="/assets/d3.min.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>
+    <div class="topbar">
+      <a class="brand" href="/" aria-label="Knowbox home">
+        <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="1.65" aria-hidden="true"><path d="m5.5 6 2.8-3.5h7.4L18.5 6" stroke="#2a4db8"/><rect x="2.5" y="6" width="19" height="15" rx="2.2"/><path d="M3 10h18m-12 4h6"/></svg>
+        knowbox
+      </a>
+      <nav aria-label="Main">
+        <a href="/">Home</a><a href="/search">Search</a><a href="/graph">Graph</a><a href="/timeline">Timeline</a><a href="/refs">Refs</a><a href="/review">Review</a><a href="/agent" id="agent-nav" hidden>Agent</a><a href="/insights" id="insights-nav" hidden>Insights</a><a href="/editor" id="editor-nav" hidden>Editor</a>
+      </nav>
+      <a class="quick" href="/search" aria-label="Search notes and IDs">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.4"/><path d="m11.5 11.5 4.5 4.5"/></svg>Search notes, ids <kbd>Ctrl K</kbd>
+      </a>
+      <div class="connection"><span id="git-status"></span><span class="readonly" id="readonly">Read-only</span></div>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"><noscript>Enable JavaScript to open the local Explorer.</noscript></main>
+</body>
+</html>

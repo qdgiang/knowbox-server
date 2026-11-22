@@ -1,0 +1,7 @@
+{
+  "name": "knowbox-explorer-browser-tests",
+  "private": true,
+  "dependencies": {
+    "playwright": "1.57.0"
+  }
+}
